@@ -54,7 +54,7 @@ io.on("connection", (socket) => {
   })
 
   socket.on("mousePosition", msg=> {
-    io.emit("mousePosition", msg)
+    socket.broadcast.emit("mousePosition", msg)
   })
 })
 
