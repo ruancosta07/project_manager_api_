@@ -9,7 +9,7 @@ const UserController = {
             const {email, name} = req.body
             const foundUser = await prisma.users.findFirst({where:{email}})
             if(foundUser){
-                return res.status(400).send({message: "Email já cadastrado"})
+                return res.status(400).json({message: "Email já cadastrado"})
             }
             const newUser = await prisma.users.create({
                 data:{
@@ -22,11 +22,11 @@ const UserController = {
                 email: newUser.email,
                 name: newUser.name
             }, jwtKey, {expiresIn: "7d", algorithm: "HS512"})
-            return res.status(201).send({message: "Usuário criado com sucesso", ...newUser, token})
+            return res.status(201).json({message: "Usuário criado com sucesso", ...newUser, token})
         }
         catch (err){
             console.log(err)
-            return res.status(500).send()
+            return res.status(500).json()
         }
     },
     login: async(req, res)=> {
@@ -34,7 +34,7 @@ const UserController = {
             const {email,} = req.body
             const foundUser = await prisma.users.findFirst({where: {email}})
             if(!foundUser){
-                return res.status(400).send({message: "Usuário ou senha incorretos"})
+                return res.status(400).json({message: "Usuário ou senha incorretos"})
             }
             const buffer = crypto.randomBytes(4);
             const randomNumber = buffer.readUInt32BE(0) % 1000000;
@@ -69,10 +69,10 @@ const UserController = {
           </div>
                 `.trim(),
               });
-            return res.status(200).send({message: "Email enviado com sucesso"})
+            return res.status(200).json({message: "Email enviado com sucesso"})
         } catch (error) {
             console.log(error)
-            return res.status(500).send()
+            return res.status(500).json()
         }
     },
     validateTokenLogin: async(req, res)=> {
@@ -80,14 +80,14 @@ const UserController = {
             const {token, email} = req.body
             const foundUser = await prisma.users.findFirst({where:{email}})
             if (!foundUser) {
-                return res.status(400).send({ message: "Email inválido" });
+                return res.status(400).json({ message: "Email inválido" });
               }
               if (foundUser.loginTokenExpiresAt < Date.now()) {
-                return res.status(400).send({ message: "Token expirado" });
+                return res.status(400).json({ message: "Token expirado" });
               }
         
               if (foundUser.loginToken != token) {
-                return res.status(400).send({ message: "Token inválido" });
+                return res.status(400).json({ message: "Token inválido" });
               }
         
               const userToken = jwt.sign(
@@ -95,7 +95,7 @@ const UserController = {
                 jwtKey,
                 { expiresIn: "7d", algorithm: "HS512" }
               );
-              return res.status(200).send({
+              return res.status(200).json({
                 message: "Usuário autenticado com sucesso",
                 token: userToken,
                 user: {
@@ -106,25 +106,25 @@ const UserController = {
               });
         } catch (error) {
             console.log(error)
-            return res.status(500).send()
+            return res.status(500).json()
         }
     },
     validateTokenUser: async(req, res)=>{
         try{
             const {authorization} = req.headers
             if(!authorization){
-                return res.status(401).send()
+                return res.status(401).json()
             }
             const [,token] = authorization.split(" ")
             if(!token){
-                return res.status(401).send()
+                return res.status(401).json()
             }
             const decodedToken = jwt.verify(token, jwtKey)
             const foundUser = await prisma.users.findFirst({where: {email:decodedToken.email}})
             if(!foundUser){
-                return res.status(401).send()
+                return res.status(401).json()
             }
-            return res.status(200).send({user: {email:foundUser.email, id:foundUser.id, name: foundUser.name, avatar: foundUser.avatar}})
+            return res.status(200).json({user: {email:foundUser.email, id:foundUser.id, name: foundUser.name, avatar: foundUser.avatar}})
         }
         catch(error){
             console.log(error)
@@ -150,15 +150,15 @@ const UserController = {
 
             }})
             if(!foundUser){
-                return res.status(404).send({message: "Nenhum usuário encontrado"})
+                return res.status(404).json({message: "Nenhum usuário encontrado"})
             }
             // if(!foundUser.projects.find((p)=> p.id)){
-            //     return res.status(401).send({message: "Usuário não participa desse projeto"})
+            //     return res.status(401).json({message: "Usuário não participa desse projeto"})
             // }
-            return foundUser
+            return res.status(200).json(foundUser)
         } catch (error) {
             console.error(error)
-            return res.status(500).send()
+            return res.status(500).json()
         }
     }
 }

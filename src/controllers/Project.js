@@ -6,7 +6,7 @@ const ProjectController = {
             const {name, userId } = req.body
             const foundUser = await prisma.users.findUnique({where: {id:userId}})
             if(!foundUser){
-                return res.status(404).send()
+                return res.status(404).json()
             }
            const newProject =  await prisma.projects.create({
                 data:{
@@ -19,10 +19,10 @@ const ProjectController = {
                     }
                 },
             })
-            return res.status(200).send({message: "Projeto criado com sucesso"})
+            return res.status(200).json({message: "Projeto criado com sucesso"})
         } catch (error) {
             console.error(error)
-            return res.status(500).send({message: "Erro interno do servidor"})
+            return res.status(500).json({message: "Erro interno do servidor"})
         }
     },
     editProject: async(req, res)=> {
@@ -39,7 +39,7 @@ const ProjectController = {
             })
         } catch (error) {
             console.error(error)
-            return res.status(500).send()
+            return res.status(500).json()
         }
     },
     getProjectById: async(req, res)=> {
@@ -54,12 +54,12 @@ const ProjectController = {
                 }
             })
             if(!foundProject){
-                return res.status(404).send({message: "Nenhum projeto encontrado"})
+                return res.status(404).json({message: "Nenhum projeto encontrado"})
             }
             if(!foundProject.participants.find((p)=> p.id === userId)){
-                return res.status(401).send({message: "Apenas participantes podem acessar esse projeto"})
+                return res.status(401).json({message: "Apenas participantes podem acessar esse projeto"})
             }
-            return res.status(200).send(foundProject)
+            return res.status(200).json(foundProject)
         } catch (error) {
         }
     },
@@ -72,7 +72,7 @@ const ProjectController = {
                 }
             })
             if(!foundProject){
-                return res.status(404).send({message: "Projeto não encontrado"})
+                return res.status(404).json({message: "Projeto não encontrado"})
             }
             await prisma.projects.delete({
                 where: {
@@ -80,7 +80,7 @@ const ProjectController = {
                 }
             })
             
-            return res.status(202).send({message: "Projeto excluído com sucesso"})
+            return res.status(202).json({message: "Projeto excluído com sucesso"})
         } catch (error) {
             
         }

@@ -1,18 +1,29 @@
 // utils/socketio.js
-import { Server } from "socket.io";
-import Fastify from "fastify";
+import { Server } from "socket.io"
+import cors from "cors"
 import prisma from "../utils/prisma";
-
-const fastify = Fastify({
-});
-const server = fastify.server
+import express from "express";
+import http from "http"
+import userRoutes from "../routes/user";
+import taskRoutes from "../routes/task";
+import projectRoutes from "../routes/project";
+const app = express()
+app.use(express.json())
+app.use(cors({
+  origin: "*",
+  methods: "*"
+}))
+app.use(userRoutes)
+app.use(taskRoutes)
+app.use(projectRoutes)
+const server = http.createServer(app)
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-  },
-});
+    origin: "*",
+    methods: "*"
+  }
+})
+
 
 const Users = new Map();
 
@@ -47,4 +58,4 @@ io.on("connection", (socket) => {
   })
 })
 
-export { io, fastify };
+export { io, server };

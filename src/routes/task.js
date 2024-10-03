@@ -1,6 +1,9 @@
 import { TaskController } from "../controllers/Tasks";
-export default async function tasksRoutes(fastify){
-    fastify.get("/:projectId/tarefas", TaskController.getTasksByProject)
-    fastify.post("/criar-tarefa", TaskController.createTasks)
-    fastify.post("/:id/excluir-tarefa", TaskController.deleteTask)
-}
+import express from "express";
+const taskRoutes = express.Router();
+
+taskRoutes.get("/:projectId/tarefas", TaskController.getTasksByProject);
+taskRoutes.post("/criar-tarefa", TaskController.createTasks);
+taskRoutes.post("/:id/excluir-tarefa", TaskController.deleteTask);
+
+export default taskRoutes;

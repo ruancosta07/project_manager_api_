@@ -1,7 +1,9 @@
 import ProjectController from "../controllers/Project";
-export default async function projectRoutes(fastify){
-    fastify.post("/criar-projeto", ProjectController.createProject)
-    fastify.get("/:userId/:projectId", ProjectController.getProjectById)
-    fastify.delete("/:id/excluir-projeto", ProjectController.deleteProject)
-}
+import {Router} from "express"
+const projectRoutes = Router()
+    projectRoutes.post("/criar-projeto", ProjectController.createProject)
+    projectRoutes.get("/:userId/:projectId", ProjectController.getProjectById)
+    projectRoutes.delete("/:id/excluir-projeto", ProjectController.deleteProject)
 
+
+export default projectRoutes

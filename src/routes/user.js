@@ -1,9 +1,11 @@
 import UserController from "../controllers/User"
+import express from "express"
+const userRoutes = express.Router()
 
-export default async function userRoutes (fastify){
-    fastify.post("/criar-conta", UserController.createAccount)
-    fastify.post("/login", UserController.login)
-    fastify.post("/validar-token", UserController.validateTokenUser)
-    fastify.post("/login/validar-token", UserController.validateTokenLogin)
-    fastify.get("/:id/projetos", UserController.getUserProjects)
-}
+    userRoutes.post("/criar-conta", UserController.createAccount)
+    userRoutes.post("/login", UserController.login)
+    userRoutes.post("/validar-token", UserController.validateTokenUser)
+    userRoutes.post("/login/validar-token", UserController.validateTokenLogin)
+    userRoutes.get("/:id/projetos", UserController.getUserProjects)
+
+    export default userRoutes

@@ -5,7 +5,7 @@ export const TaskController = {
         try {
             const {projectId} = req.params
             const tasks = await prisma.tasks.findMany({where: {projectId}, include:{project: {select: {name:true}}}})
-            return res.status(200).send(tasks)
+            return res.status(200).json(tasks)
         } catch (error) {
             
         }
@@ -26,10 +26,10 @@ export const TaskController = {
                 },
             });
     
-            return res.status(200).send({ message: "Tarefa criada com sucesso", newTask });
+            return res.status(200).json({ message: "Tarefa criada com sucesso", newTask });
         } catch (error) {
             console.error(error);
-            return res.status(500).send({ message: "Erro ao criar a tarefa" });
+            return res.status(500).json({ message: "Erro ao criar a tarefa" });
         }
     },
     deleteTask: async(req, res)=> {
@@ -37,10 +37,10 @@ export const TaskController = {
             const {id} = req.params
             const foundTask = await prisma.tasks.findFirst({where: {id}})
             if(!foundTask){
-                return res.status(404).send({message: "Tarefa não encontrada"})
+                return res.status(404).json({message: "Tarefa não encontrada"})
             }
             await prisma.tasks.delete({where: {id:foundTask.id}})
-            return res.status(202).send({message: "Tarefa excluída com sucesso"})
+            return res.status(202).json({message: "Tarefa excluída com sucesso"})
         }
         catch(error){
             console.log(error)
