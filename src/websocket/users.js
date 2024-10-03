@@ -8,7 +8,7 @@ const fastify = Fastify({
 const server = fastify.server
 const io = new Server(server, {
   cors: {
-    origin: "*",
+    origin: "localhost:5173",
     methods: ["GET", "POST"],
     allowedHeaders: ["Content-Type", "Authorization"]
   },
