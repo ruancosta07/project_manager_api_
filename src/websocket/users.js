@@ -53,9 +53,9 @@ io.on("connection", (socket) => {
     io.emit("createTask", tasks)
   })
 
-  socket.on("mousePosition", msg=> {
-    socket.broadcast.emit("mousePosition", msg)
-  })
+  // socket.on("mousePosition", msg=> {
+  //   socket.broadcast.emit("mousePosition", msg)
+  // })
 })
 
 export { io, server };
