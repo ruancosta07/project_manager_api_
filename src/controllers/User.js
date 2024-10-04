@@ -121,9 +121,9 @@ const UserController = {
             }
             const decodedToken = jwt.verify(token, jwtKey)
             const foundUser = await prisma.users.findFirst({where: {email:decodedToken.email}})
-            if(!foundUser){
-                return res.status(401).json()
-            }
+            // if(!foundUser){
+            //     return res.status(401).json()
+            // }
             return res.status(200).json({user: {email:foundUser.email, id:foundUser.id, name: foundUser.name, avatar: foundUser.avatar}})
         }
         catch(error){
