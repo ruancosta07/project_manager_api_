@@ -4,6 +4,6 @@ const taskRoutes = express.Router();
 
 taskRoutes.get("/:projectId/tarefas", TaskController.getTasksByProject);
 taskRoutes.post("/criar-tarefa", TaskController.createTasks);
-taskRoutes.post("/:id/excluir-tarefa", TaskController.deleteTask);
+taskRoutes.delete("/:id/excluir-tarefa", TaskController.deleteTask);
 
 export default taskRoutes;
