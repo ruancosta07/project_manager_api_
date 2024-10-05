@@ -6,6 +6,7 @@
     "start": "bun src/server.js",
     "dev": "bun --watch run src/server.js",
     "dev:prisma": "bun prisma db push; bun dev",
+    "db-deploy-and-start": "prisma generate && bun run src/server.js",
     "postinstall": "prisma generate"
   },
   "devDependencies": {
